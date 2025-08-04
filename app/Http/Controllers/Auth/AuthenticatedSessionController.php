@@ -31,6 +31,16 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
+        $user = Auth::user();
+
+        // Check if user is admin
+        if ($user->user_type !== 'admin') {
+            Auth::logout(); // Logout the user
+            return back()->withErrors([
+                'email' => 'Only administrators are allowed to log in.',
+            ]);
+        }
+
         $request->session()->regenerate();
 
         return redirect(RouteServiceProvider::HOME);

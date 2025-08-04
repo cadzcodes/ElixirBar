@@ -1,5 +1,6 @@
-@import url(https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap);
 @charset "UTF-8";
+@import url(https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&family=Mona+Sans:ital,wght@0,200..900;1,200..900&display=swap);
+
 /*!
 * Version: 1.2.0
 * Template: Hope-Ui - Responsive Bootstrap 5 Admin Dashboard Template
@@ -11,6 +12,12 @@
 :focus {
   outline: none;
 }
+
+@font-face {
+    font-family: "Modern Negra";
+    src: url("../fonts/ModernNegraDemo.ttf") format("truetype");
+}
+
 
 :root {
   --prefix: bs-;
@@ -59,7 +66,7 @@
   --bs-black-rgb: 0, 0, 0;
   --bs-body-color-rgb: 138, 146, 166;
   --bs-body-bg-rgb: 245, 246, 250;
-  --bs-font-sans-serif: "Inter", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --bs-font-sans-serif: "Mona Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
   --bs-body-font-family: var(--bs-font-sans-serif);
@@ -13817,6 +13824,11 @@ thead, tbody, tfoot, tr, td, th {
   display: flex;
   align-items: center;
 }
+
+.logo-title {
+  font-family: 'Modern Negra';
+  font-size: 2rem;
+}
 .nav .navbar-brand .logo-title {
   margin-left: 1rem;
   color: #212529;
@@ -15433,6 +15445,7 @@ body.offcanvas-active {
   width: 100%;
   height: 100%;
   position: relative;
+  background: url(../images/loader.gif) no-repeat scroll center center;
 }
 
 .credit-card-widget .primary-gradient-card {

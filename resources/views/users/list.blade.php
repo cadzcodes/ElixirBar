@@ -14,7 +14,6 @@
             </div>
             <div class="card-body px-0">
                <div class="table-responsive">
-                  <!-- <table id="user-list-table" class="table table-striped" role="grid" data-toggle="data-table">
                      <thead>
                         <tr class="ligth">
                            <th>Profile</th>

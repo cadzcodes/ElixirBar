@@ -24,11 +24,14 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
         'username',
         'first_name',
         'last_name',
-        'phone_number',
-        'status',
-        'banned',
         'email',
         'password',
+        'phone',
+        'gender',
+        'date_of_birth',
+        'status',
+        'banned',
+        'user_type',
     ];
 
     /**
@@ -57,7 +60,8 @@ class User extends Authenticatable implements MustVerifyEmail, HasMedia
         return $this->first_name . ' ' . $this->last_name;
     }
 
-    public function userProfile() {
+    public function userProfile()
+    {
         return $this->hasOne(UserProfile::class, 'user_id', 'id');
     }
 }
