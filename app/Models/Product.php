@@ -25,5 +25,10 @@ class Product extends Model
         });
     }
 
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset($this->image) : null;
+    }
+
 
 }

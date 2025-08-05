@@ -389,7 +389,7 @@
                     <span class="item-name">User Profile</span>
                 </a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link {{activeRoute(route('users.create'))}}" href="{{route('users.create')}}">
                     <i class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
@@ -400,6 +400,19 @@
                     </i>
                     <i class="sidenav-mini-icon"> E </i>
                     <span class="item-name">Edit User</span>
+                </a>
+            </li> --}}
+            <li class="nav-item">
+                <a class="nav-link {{activeRoute(route('clients.index'))}}" href="{{route('clients.index')}}">
+                    <i class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
+                            <g>
+                                <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
+                            </g>
+                        </svg>
+                    </i>
+                    <i class="sidenav-mini-icon"> U </i>
+                    <span class="item-name">Clients List</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -412,7 +425,7 @@
                         </svg>
                     </i>
                     <i class="sidenav-mini-icon"> U </i>
-                    <span class="item-name">User List</span>
+                    <span class="item-name">Admin List</span>
                 </a>
             </li>
         </ul>
@@ -456,7 +469,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{activeRoute(route('users.index'))}}" href="{{route('users.index')}}">
+                <a class="nav-link {{activeRoute(route('admin.add-product'))}}" href="{{route('admin.add-product')}}">
                     <i class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                             <g>
@@ -465,20 +478,7 @@
                         </svg>
                     </i>
                     <i class="sidenav-mini-icon"> E </i>
-                    <span class="item-name">Edit User</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{activeRoute(route('users.index'))}}" href="{{route('users.index')}}">
-                    <i class="icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
-                            <g>
-                                <circle cx="12" cy="12" r="8" fill="currentColor"></circle>
-                            </g>
-                        </svg>
-                    </i>
-                    <i class="sidenav-mini-icon"> U </i>
-                    <span class="item-name">User List</span>
+                    <span class="item-name">Add Product</span>
                 </a>
             </li>
         </ul>

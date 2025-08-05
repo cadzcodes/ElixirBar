@@ -15,7 +15,7 @@ class ClientsDataTable extends DataTable
             ->editColumn('gender', fn($row) => ucfirst($row->gender ?? '-'))
             ->editColumn('date_of_birth', fn($row) => $row->date_of_birth ? date('Y-m-d', strtotime($row->date_of_birth)) : '-')
             ->addColumn('action', function ($row) {
-                $editUrl = route('users.edit', $row->id); // Ensure this route exists
+                $editUrl = route('clients.edit', $row->id);
                 return '<a href="' . $editUrl . '" class="btn btn-sm btn-primary">Edit</a>';
             })
             ->rawColumns(['action']);

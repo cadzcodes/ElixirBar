@@ -28,66 +28,68 @@ class UserRequest extends FormRequest
     public function rules()
     {
         $method = strtolower($this->method());
-        $user_id = $this->route()->user;
+        $userId = $this->route('id') ?? $this->route('user'); // adjust based on your route parameter name
 
         $rules = [];
+
         switch ($method) {
             case 'post':
                 $rules = [
-                    'username' => 'required|max:20',
+                    'username' => 'required|max:20|unique:users,username',
                     'password' => 'required|confirmed|min:8',
-                    'email' => 'required|max:191|email|unique:users',
-                    'phone_number'=>'max:13',
-                    // 'userProfile.gender' =>  'required',
-                    'userProfile.country' =>  'max:191',
-                    'userProfile.state' =>  'max:191',
-                    'userProfile.city' =>  'max:191',
-                    'userProfile.pin_code' =>  'max:191',
-                ];
-                break;
-            case 'patch':
-                $rules = [
-                    'username' => 'required|max:20',
-                    'email' => 'required|max:191|email|unique:users,email,'.$user_id,
-                    'phone_number'=>'max:13',
-                    'password' => 'confirmed|min:8|nullable',
-                    // 'userProfile.gender' =>  'required',
-                    'userProfile.country' =>  'max:191',
-                    'userProfile.state' =>  'max:191',
-                    'userProfile.city' =>  'max:191',
-                    'userProfile.pin_code' =>  'max:191',
+                    'email' => 'required|max:191|email|unique:users,email',
+                    'phone_number' => 'max:13',
+                    'userProfile.country' => 'max:191',
+                    'userProfile.state' => 'max:191',
+                    'userProfile.city' => 'max:191',
+                    'userProfile.pin_code' => 'max:191',
                 ];
                 break;
 
+            case 'patch':
+                $rules = [
+                    'username' => 'sometimes|max:20|unique:users,username,' . $userId,
+                    'email' => 'required|email|max:191|unique:users,email,' . $userId,
+                    'phone_number' => 'max:13',
+                    'password' => 'nullable|confirmed|min:8',
+                    'userProfile.country' => 'max:191',
+                    'userProfile.state' => 'max:191',
+                    'userProfile.city' => 'max:191',
+                    'userProfile.pin_code' => 'max:191',
+                ];
+                break;
         }
 
         return $rules;
     }
 
+
+
     public function messages()
     {
         return [
-            'userProfile.gender.*'  =>'Gender is required.',
-            'userProfile.dob.*'  =>'DOB is required.',
-            'userProfile.country.*'  =>'Country may not be greater than 191 characters.',
-            'userProfile.state.*'  =>'State may not be greater than 191 characters.',
-            'userProfile.city.*'  =>'City may not be greater than 191 characters.',
-            'userProfile.pin_code.*'  =>'Pincode may not be greater than 191 characters.',
+            'userProfile.gender.*' => 'Gender is required.',
+            'userProfile.dob.*' => 'DOB is required.',
+            'userProfile.country.*' => 'Country may not be greater than 191 characters.',
+            'userProfile.state.*' => 'State may not be greater than 191 characters.',
+            'userProfile.city.*' => 'City may not be greater than 191 characters.',
+            'userProfile.pin_code.*' => 'Pincode may not be greater than 191 characters.',
         ];
     }
 
-     /**
+    /**
      * @param Validator $validator
      */
-    protected function failedValidation(Validator $validator){
+    protected function failedValidation(Validator $validator)
+    {
         $data = [
             'status' => true,
             'message' => $validator->errors()->first(),
-            'all_message' =>  $validator->errors()
+            'all_message' => $validator->errors()
         ];
 
         if ($this->ajax()) {
-            throw new HttpResponseException(response()->json($data,422));
+            throw new HttpResponseException(response()->json($data, 422));
         } else {
             throw new HttpResponseException(redirect()->back()->withInput()->with('errors', $validator->errors()));
         }

@@ -170,4 +170,52 @@ class UserController extends Controller
 
         return $dataTable->render('users.client-list', compact('pageTitle', 'assets'));
     }
+
+    public function editClient($id)
+    {
+        $user = User::with('userProfile')
+            ->where('id', $id)
+            ->where('user_type', 'user') // Correct way to check column value
+            ->firstOrFail();
+
+        return view('users.client-form', ['client' => $user, 'id' => $id]);
+    }
+
+    public function updateClient(UserRequest $request, $id)
+    {
+        $user = User::with('userProfile')->findOrFail($id);
+
+        // Keep the current password if the field is left blank
+        if ($request->filled('password')) {
+            $request['password'] = bcrypt($request->password);
+        } else {
+            $request['password'] = $user->password;
+        }
+
+        // Don't update username
+        $input = $request->except('username');
+
+        // Update user
+        $user->fill($input)->update();
+
+        // Update profile image if provided
+        if ($request->hasFile('profile_image')) {
+            $user->clearMediaCollection('profile_image');
+            $user->addMediaFromRequest('profile_image')->toMediaCollection('profile_image');
+        }
+
+        if ($user->userProfile) {
+            if ($request->has('userProfile')) {
+                $user->userProfile->fill($request->userProfile)->update();
+            }
+        } else {
+            if ($request->has('userProfile') && is_array($request->userProfile)) {
+                $user->userProfile()->create($request->userProfile);
+            }
+        }
+        return redirect()->route('clients.index')->withSuccess(__('User Succesfully Updated', ['name' => 'Client']));
+    }
+
+
+
 }

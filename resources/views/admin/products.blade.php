@@ -8,7 +8,6 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <p>Product images are displayed using <code>.img-fluid</code> for responsiveness.</p>
                     <div class="table-responsive">
                         <table id="datatable" class="table table-striped" data-toggle="data-table">
                             <thead>
@@ -18,6 +17,7 @@
                                     <th>Description</th>
                                     <th>Price</th>
                                     <th>Sale Price</th>
+                                    <th>Action</th> {{-- ✅ New Action Column --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -37,6 +37,12 @@
                                                 <span class="text-muted">—</span>
                                             @endif
                                         </td>
+                                        <td> {{-- ✅ Action Buttons --}}
+                                            <a href="{{ route('products.edit', $product->id) }}"
+                                                class="btn btn-sm btn-primary">
+                                                Edit
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -47,6 +53,7 @@
                                     <th>Description</th>
                                     <th>Price</th>
                                     <th>Sale Price</th>
+                                    <th>Action</th> {{-- ✅ Action Footer --}}
                                 </tr>
                             </tfoot>
                         </table>

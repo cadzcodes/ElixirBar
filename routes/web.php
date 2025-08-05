@@ -120,9 +120,17 @@ Route::get('privacy-policy', [HomeController::class, 'privacypolicy'])->name('pa
 Route::get('terms-of-use', [HomeController::class, 'termsofuse'])->name('pages.term-of-use');
 
 Route::get('/productslist', [ProductTableController::class, 'index'])->name('admin.products');
-
+Route::get('/products/{id}/edit', [ProductTableController::class, 'edit'])->name('products.edit');
+Route::post('/products', [ProductTableController::class, 'store'])->name('product.store');
+Route::patch('/products/{id}', [ProductTableController::class, 'update'])->name('products.update');
+Route::delete('/products/{id}', [ProductTableController::class, 'destroy'])->name('products.destroy');
 Route::get('/addproduct', [ProductTableController::class, 'create'])->name('admin.add-product');
 Route::post('/addproduct', [ProductTableController::class, 'store'])->name('admin.store-product');
 
+
 Route::get('/clients', [UserController::class, 'clientList'])->name('clients.list');
-Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
+
+Route::get('clients', [UserController::class, 'clientList'])->name('clients.index');
+
+Route::get('/clients/{id}/edit', [UserController::class, 'editClient'])->name('clients.edit');
+Route::patch('/clients/{id}', [UserController::class, 'updateClient'])->name('clients.update');
