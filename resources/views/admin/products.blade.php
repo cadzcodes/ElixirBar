@@ -24,8 +24,10 @@
                                 @foreach($products as $product)
                                     <tr>
                                         <td>
-                                            <img src="{{ asset($product->image) }}" alt="{{ $product->name }}"
-                                                class="img-fluid rounded" style="width: 80px; height: auto;">
+                                            <img src="{{ asset($product->image ?? 'images/missing.png') }}"
+                                                alt="{{ $product->name }}" class="img-fluid rounded"
+                                                style="width: 80px; height: auto;"
+                                                onerror="this.onerror=null;this.src='{{ asset('images/missing.png') }}';">
                                         </td>
                                         <td>{{ $product->name }}</td>
                                         <td>{{ Str::limit($product->description, 50) }}</td>

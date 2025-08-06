@@ -132,45 +132,48 @@
                             <div class="form-group">
                                 <label class="form-label">Tags</label>
                                 <input type="text" name="tags" class="form-control"
-                                    placeholder="Comma-separated (e.g. mint, refreshing, mojito)">
+                                    placeholder="Comma-separated (e.g. mint, refreshing, mojito)"
+                                    value="{{ old('tags', is_array(json_decode($product->tags)) ? implode(', ', json_decode($product->tags)) : $product->tags ?? '') }}">
                             </div>
+
+
 
                             {{-- Availability Status (optional for UI) --}}
                             <div class="form-group mt-3">
                                 <label class="form-label">Availability</label>
                                 <div class="d-flex gap-4">
                                     <div class="form-check">
-                                        <input type="radio" class="form-check-input" name="availability" id="in-stock"
-                                            checked>
+                                        {{ Form::radio('availability', 'in-stock', $product->availability === 'in-stock' ?? true, ['class' => 'form-check-input', 'id' => 'in-stock']) }}
                                         <label class="form-check-label" for="in-stock">In Stock</label>
                                     </div>
                                     <div class="form-check">
-                                        <input type="radio" class="form-check-input" name="availability" id="out-stock">
+                                        {{ Form::radio('availability', 'out-of-stock', $product->availability === 'out-of-stock', ['class' => 'form-check-input', 'id' => 'out-stock']) }}
                                         <label class="form-check-label" for="out-stock">Out of Stock</label>
                                     </div>
                                 </div>
                             </div>
 
                             {{-- Submit --}}
-                            <div class="mt-4">
+                            <div class="mt-4 d-flex gap-2">
                                 <button type="submit" class="btn btn-primary">
                                     {{ $id ? 'Update' : 'Add' }} Product
                                 </button>
 
                                 @if($id)
-                                    <button type="button" class="btn btn-danger mt-2" data-bs-toggle="modal"
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
                                         data-bs-target="#deleteModal">
                                         Delete Product
                                     </button>
                                 @endif
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         {!! Form::close() !!}
-        
+
         @if($id)
             <!-- Delete Confirmation Modal -->
             <div class="modal fade" id="deleteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"

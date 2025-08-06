@@ -39,25 +39,50 @@ class ProductTableController extends Controller
             'sale_price' => 'nullable|numeric',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'availability' => 'required|in:in-stock,out-of-stock',
             'tags' => 'nullable|string',
         ]);
 
-        $product = new Product($validated);
+        // Handle tags
+        $tagsArray = $request->filled('tags')
+            ? array_map('trim', explode(',', $request->tags))
+            : [];
 
         // Auto-generate slug
-        $product->slug = \Str::slug($request->name);
+        $slug = \Str::slug($validated['name']);
 
-        // Handle image removal
-        if ($request->has('remove_image') && $request->remove_image == "1") {
-            $product->image = null;
-        }
+        $product = new Product($validated);
+        $product->slug = $slug;
+        $product->tags = count($tagsArray) > 0 ? $tagsArray : null;
 
         // Handle image upload
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
+
             $image->move(public_path('images'), $imageName);
             $product->image = 'images/' . $imageName;
+
+            $sourcePath = public_path('images/' . $imageName);
+            $copyTargets = [
+                env('ELIXIR_EMPORIUM_PATH'),
+                storage_path('app/public/images'),
+            ];
+
+            foreach ($copyTargets as $targetPath) {
+                try {
+                    if (File::exists($sourcePath)) {
+                        File::copy($sourcePath, $targetPath . DIRECTORY_SEPARATOR . $imageName);
+                    }
+                } catch (\Exception $e) {
+                    \Log::error('Image copy failed to ' . $targetPath . ': ' . $e->getMessage());
+                }
+            }
+        }
+
+        // Handle image removal (just in case)
+        if ($request->has('remove_image') && $request->remove_image == "1") {
+            $product->image = null;
         }
 
         $product->save();
@@ -66,17 +91,31 @@ class ProductTableController extends Controller
     }
 
 
+
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'description' => 'required|string',
+            'availability' => 'required|in:in-stock,out-of-stock',
+            'tags' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $product = Product::findOrFail($id);
+
+        // Update slug if name changed
+        $product->slug = \Str::slug($validated['name']);
+
+        // Handle tags
+        $tagsArray = $request->filled('tags')
+            ? array_map('trim', explode(',', $request->tags))
+            : [];
+
+        $product->fill($validated);
+        $product->tags = count($tagsArray) > 0 ? $tagsArray : null;
 
         // Handle image removal
         if ($request->has('remove_image') && $request->remove_image == "1") {
@@ -88,7 +127,6 @@ class ProductTableController extends Controller
 
         // Handle image upload
         if ($request->hasFile('image')) {
-            // Remove old if exists
             if ($product->image && File::exists(public_path($product->image))) {
                 File::delete(public_path($product->image));
             }
@@ -96,13 +134,33 @@ class ProductTableController extends Controller
             $image = $request->file('image');
             $imageName = time() . '_' . $image->getClientOriginalName();
             $image->move(public_path('images'), $imageName);
-            $validated['image'] = 'images/' . $imageName;
+
+            $imagePath = 'images/' . $imageName;
+            $product->image = $imagePath;
+
+            $sourcePath = public_path($imagePath);
+            $copyTargets = [
+                env('ELIXIR_EMPORIUM_PATH'),
+                storage_path('app/public/images'),
+            ];
+
+            foreach ($copyTargets as $targetPath) {
+                try {
+                    if (File::exists($sourcePath)) {
+                        File::copy($sourcePath, $targetPath . DIRECTORY_SEPARATOR . $imageName);
+                    }
+                } catch (\Exception $e) {
+                    \Log::error('Image copy failed to ' . $targetPath . ': ' . $e->getMessage());
+                }
+            }
         }
 
-        $product->update($validated);
+        $product->save();
 
         return redirect()->route('admin.products')->with('success', 'Product updated successfully.');
     }
+
+
 
     public function destroy($id)
     {
