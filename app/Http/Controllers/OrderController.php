@@ -13,4 +13,8 @@ class OrderController extends Controller
             'pageTitle' => 'Order List',
         ]);
     }
+    public function view($id)
+    {
+        return view('orders.order', ['id' => $id]);
+    }
 }

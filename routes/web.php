@@ -137,3 +137,5 @@ Route::get('/clients/{id}/edit', [UserController::class, 'editClient'])->name('c
 Route::patch('/clients/{id}', [UserController::class, 'updateClient'])->name('clients.update');
 
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.order-list');
+
+Route::get('/admin/orders/{order}/view', [OrderController::class, 'view'])->name('orders.order');

@@ -17,8 +17,8 @@ class OrdersDataTable extends DataTable
             ->editColumn('order_date', fn($order) => $order->order_date ? $order->order_date->format('Y-m-d') : '-')
             ->editColumn('status', fn($order) => ucfirst($order->status ?? 'pending'))
             ->addColumn('action', function ($order) {
-                $showUrl = "#"; // Update this later when route is ready
-                return '<a href="' . $showUrl . '" class="btn btn-sm btn-info">View</a>';
+                $showUrl =  route('orders.order', $order->id); // Update this later when route is ready
+                return '<a href="' . $showUrl . '"  class="btn btn-sm btn-primary">View</a>';
             })
             ->rawColumns(['action']);
     }
