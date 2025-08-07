@@ -25,7 +25,7 @@
                            </div>
                            <div class="progress-detail">
                               <p class="mb-2">Total Sales</p>
-                              <h4 class="counter" style="visibility: visible;">₱560K</h4>
+                              <h4 class="counter" style="visibility: visible;">₱{{ number_format($subtotal, 2) }}</h4>
                            </div>
                         </div>
                      </div>
@@ -49,7 +49,7 @@
                            </div>
                            <div class="progress-detail">
                               <p class="mb-2">Total Profit</p>
-                              <h4 class="counter">₱185K</h4>
+                              <h4 class="counter" style="visibility: visible;">₱{{ number_format($profit, 2) }}</h4>
                            </div>
                         </div>
                      </div>
@@ -76,7 +76,7 @@
                            </div>
                            <div class="progress-detail">
                               <p class="mb-2">Total Cost</p>
-                              <h4 class="counter">₱375K</h4>
+                              <h4 class="counter" style="visibility: visible;">₱{{ number_format($cost, 2) }}</h4>
                            </div>
                         </div>
                      </div>
@@ -116,7 +116,7 @@
                            </div>
                            <div class="progress-detail">
                               <p class="mb-2">Users</p>
-                              <h4 class="counter">5</h4>
+                              <h4 class="counter">{{ $userCount }}</h4>
                            </div>
                         </div>
                      </div>
@@ -141,7 +141,7 @@
                            </div>
                            <div class="progress-detail">
                               <p class="mb-2">Products</p>
-                              <h4 class="counter">10</h4>
+                              <h4 class="counter">{{$productCount}}</h4>
                            </div>
                         </div>
                      </div>
@@ -152,7 +152,8 @@
                            <div id="circle-progress-06"
                               class="circle-progress-01 circle-progress circle-progress-info text-center"
                               data-min-value="0" data-max-value="100" data-value="40" data-type="percent">
-                              <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="card-slie-arrow">
+                              <svg width="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                                 class="card-slie-arrow">
                                  <path fill-rule="evenodd" clip-rule="evenodd"
                                     d="M14.7379 2.76175H8.08493C6.00493 2.75375 4.29993 4.41175 4.25093 6.49075V17.2037C4.20493 19.3167 5.87993 21.0677 7.99293 21.1147C8.02393 21.1147 8.05393 21.1157 8.08493 21.1147H16.0739C18.1679 21.0297 19.8179 19.2997 19.8029 17.2037V8.03775L14.7379 2.76175Z"
                                     stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
@@ -168,7 +169,7 @@
                            </div>
                            <div class="progress-detail">
                               <p class="mb-2">Orders</p>
-                              <h4 class="counter">10</h4>
+                              <h4 class="counter">{{$orderCount}}</h4>
                            </div>
                         </div>
                      </div>
@@ -632,4 +633,12 @@
          </div>
       </div>
    </div>
+
+   <script>
+      window.__DASHBOARD_CHART__ = {
+         months: @json($months),
+         sales: @json($monthlySales),
+         costs: @json($monthlyCosts)
+      };
+   </script>
 </x-app-layout>

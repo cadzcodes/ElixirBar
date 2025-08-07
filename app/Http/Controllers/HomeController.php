@@ -2,18 +2,63 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
 
 class HomeController extends Controller
 {
     /*
      * Dashboard Pages Routs
      */
+
     public function index(Request $request)
     {
         $assets = ['chart', 'animation'];
-        return view('dashboards.dashboard', compact('assets'));
+        $userCount = User::count();
+        $productCount = Product::count();
+        $orderCount = Order::count();
+
+        $subtotal = Order::sum('total');
+        $cost = $subtotal * 0.20;
+        $profit = $subtotal - $cost;
+
+        // Get monthly data (last 7 months)
+        $monthlyData = Order::selectRaw("DATE_FORMAT(order_date, '%b') as month, SUM(total) as total")
+            ->where('order_date', '>=', now()->subMonths(6)->startOfMonth())
+            ->groupBy(DB::raw("DATE_FORMAT(order_date, '%b')"))
+            ->orderBy(DB::raw("MIN(order_date)"))
+            ->get();
+
+        // Ensure months are in order (Jan, Feb, etc.)
+        $months = [];
+        $monthlySales = [];
+        $monthlyCosts = [];
+
+        foreach ($monthlyData as $row) {
+            $months[] = $row->month;
+            $monthlySales[] = (float) $row->total;
+            $monthlyCosts[] = round($row->total * 0.20, 2);
+        }
+
+        return view('dashboards.dashboard', compact(
+            'assets',
+            'userCount',
+            'productCount',
+            'orderCount',
+            'subtotal',
+            'cost',
+            'profit',
+            'months',
+            'monthlySales',
+            'monthlyCosts'
+        ));
     }
+
 
     /*
      * Menu Style Routs
@@ -21,27 +66,27 @@ class HomeController extends Controller
     public function horizontal(Request $request)
     {
         $assets = ['chart', 'animation'];
-        return view('menu-style.horizontal',compact('assets'));
+        return view('menu-style.horizontal', compact('assets'));
     }
     public function dualhorizontal(Request $request)
     {
         $assets = ['chart', 'animation'];
-        return view('menu-style.dual-horizontal',compact('assets'));
+        return view('menu-style.dual-horizontal', compact('assets'));
     }
     public function dualcompact(Request $request)
     {
         $assets = ['chart', 'animation'];
-        return view('menu-style.dual-compact',compact('assets'));
+        return view('menu-style.dual-compact', compact('assets'));
     }
     public function boxed(Request $request)
     {
         $assets = ['chart', 'animation'];
-        return view('menu-style.boxed',compact('assets'));
+        return view('menu-style.boxed', compact('assets'));
     }
     public function boxedfancy(Request $request)
     {
         $assets = ['chart', 'animation'];
-        return view('menu-style.boxed-fancy',compact('assets'));
+        return view('menu-style.boxed-fancy', compact('assets'));
     }
 
     /*
@@ -55,7 +100,7 @@ class HomeController extends Controller
     public function calender(Request $request)
     {
         $assets = ['calender'];
-        return view('special-pages.calender',compact('assets'));
+        return view('special-pages.calender', compact('assets'));
     }
 
     public function kanban(Request $request)
@@ -180,7 +225,7 @@ class HomeController extends Controller
         return view('forms.validation');
     }
 
-     /*
+    /*
      * Table Page Routs
      */
     public function bootstraptable(Request $request)
