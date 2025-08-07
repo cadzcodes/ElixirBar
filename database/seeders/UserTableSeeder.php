@@ -16,12 +16,13 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         $users = [
-            [
+            [   
+                'name' => 'sample',
                 'first_name' => 'System',
                 'last_name' => 'Admin',
                 'username' => 'systemadmin',
                 'email' => 'admin@example.com',
-                'password' => bcrypt('password'),
+                'password' => bcrypt('admin123'),
                 'phone_number' => '+12398190255',
                 'email_verified_at' => now(),
                 'user_type' => 'admin',

@@ -4,7 +4,7 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
                     <div class="header-title">
-                        <h4 class="card-title mb-1">Order #{{$id}}</h4>
+                        <h4 class="card-title mb-1">Order #{{ $orderData->id }}</h4>
                         <p class="mb-0 text-muted">
                             <strong>Customer:</strong> Raymund Joel Cadiz <br>
                             <strong>Order Date:</strong> Aug 7, 2025
@@ -35,12 +35,11 @@
                                         $isCurrent = $index === $currentIndex;
                                     @endphp
                                     <div class="text-center flex-fill position-relative" style="z-index: 2;">
-                                        <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center"
-                                            style="width: 48px; height: 48px;
-                                                background-color: {{ $isActive ? '#0d6efd' : '#6c757d' }};
-                                                color: white;
-                                                border: 3px solid {{ $isCurrent ? 'white' : ($isActive ? '#0d6efd' : '#6c757d') }};
-                                                box-shadow: 0 0 0 3px {{ $isActive ? '#0d6efd44' : 'transparent' }};">
+                                        <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center
+                                            {{ $isActive ? 'bg-primary' : 'bg-secondary' }}" style="width: 48px; height: 48px;
+                                           color: white;
+                                           border: 3px solid {{ $isCurrent ? 'white' : ($isActive ? '#0d6efd' : '#6c757d') }};
+                                           box-shadow: 0 0 0 3px {{ $isActive ? '#0d6efd44' : 'transparent' }};">
                                             @if ($step === 'Order Placed')
                                                 <i class="bi bi-check-circle-fill fs-5"></i>
                                             @elseif ($step === 'To Ship')
@@ -51,9 +50,10 @@
                                                 <i class="bi bi-star-fill fs-5"></i>
                                             @endif
                                         </div>
-                                        <small class="d-block mt-2"
-                                            style="color: {{ $isActive ? '#0d6efd' : '#adb5bd' }}">{{ $step }}</small>
+                                        <small
+                                            class="d-block mt-2 text-{{ $isActive ? 'primary' : 'secondary' }}">{{ $step }}</small>
                                     </div>
+
                                 @endforeach
                             </div>
                         </div>
@@ -77,11 +77,11 @@
                                 <div>
                                     <span><b>Order Total</b></span>
                                     <div class="mt-2">
-                                        <h2 class="counter">₱35,000</h2>
+                                        <h2 class="counter">₱{{ $orderData->total }}</h2>
                                     </div>
                                 </div>
                                 <div>
-                                    <span class="badge bg-primary">Cash on Delivery</span>
+                                    <span class="badge bg-primary">GCash</span>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between mt-2">
@@ -211,7 +211,7 @@
                                                         d="M12.3 8.93L9.88 6.5H15.5V10H17V5H9.88L12.3 2.57L11.24 1.5L7 5.75L11.24 10L12.3 8.93M12 14A3 3 0 1 0 15 17A3 3 0 0 0 12 14M3 11V23H21V11M19 19A2 2 0 0 0 17 21H7A2 2 0 0 0 5 19V15A2 2 0 0 0 7 13H17A2 2 0 0 0 19 15Z" />
                                                 </svg>
                                             </div>
-                                            <h2 class="counter">₱2,300</h2>
+                                            <h2 class="counter">₱{{ $orderData->subtotal}}</h2>
                                         </div>
                                         <div class="pt-3">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"
@@ -250,7 +250,7 @@
                                                         fill="currentColor" />
                                                 </svg>
                                             </div>
-                                            <h2 class="counter">₱100</h2>
+                                            <h2 class="counter">₱{{ $orderData->shipping_fee }}</h2>
                                         </div>
                                         <div class="pt-3">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px"
@@ -281,41 +281,84 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="card shadow-sm">
-                        <div class="card-header bg-primary text-white d-flex align-items-center"
-                            style="border-bottom: 2px dashed #fff;">
-                            <i class="bi bi-envelope-fill me-2"></i>
-                            <strong>Shipping Address</strong>
-                        </div>
-                        <div class="card-body position-relative p-4">
-                            <div class="border p-3 rounded bg-light position-relative"
-                                style="border-left: 5px solid #0d6efd;">
-                                <div class="mb-2">
-                                    <h5 class="mb-0">
-                                        <i class="bi bi-person-fill me-2"></i>Raymund Joel Cadiz
-                                        <small class="text-muted"> (0927 765 2053)</small>
-                                    </h5>
-                                </div>
+                @if ($orderData->shipping)
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-primary text-white d-flex align-items-center py-3"
+                                style="border-bottom: 2px dashed #fff;">
+                                <i class="bi bi-envelope-fill me-2 fs-5"></i>
+                                <strong class="fs-6">Shipping Address</strong>
+                            </div>
+                            <div class="card-body position-relative p-4">
+                                <div class="border p-3 rounded bg-light position-relative"
+                                    style="border-left: 5px solid #0d6efd;">
+                                    <div class="mb-2">
+                                        <h5 class="mb-0">
+                                            <i class="bi bi-person-fill me-2"></i>{{ $orderData->shipping['name'] }}
+                                            <small class="text-muted">({{ $orderData->shipping['phone'] }})</small>
+                                        </h5>
+                                    </div>
 
-                                <div class="mb-2">
-                                    <i class="bi bi-geo-alt-fill me-2"></i>
-                                    Phase 8B, Package 5<br>
-                                    Block 81, Lot 1, Bagong Silang, Caloocan City
-                                </div>
+                                    <div class="mb-2">
+                                        <i class="bi bi-geo-alt-fill me-2"></i>
+                                        {{ $orderData->shipping['address1'] }}<br>
+                                        {{ $orderData->shipping['address2'] }}
+                                    </div>
 
-                                <div class="text-end">
-                                    <span class="badge bg-secondary">
-                                        <i class="bi bi-house-door-fill me-1"></i> Home
-                                    </span>
+                                    <div class="text-end">
+                                        <span class="badge bg-secondary">
+                                            <i class="bi bi-house-door-fill me-1"></i>
+                                            {{ ucfirst($orderData->shipping['type']) }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
+                @endif
             </div>
 
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-dark text-white d-flex align-items-center py-3">
+                            <i class="bi bi-list-ul me-2 fs-5"></i>
+                            <strong class="fs-6">Ordered Items</strong>
+                        </div>
+                        <div class="card-body table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light text-center">
+                                    <tr>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Item Name</th>
+                                        <th scope="col">Unit Price</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($orderData->items as $item)
+                                        <tr class="text-center">
+                                            <td>
+                                                <img src="{{ asset($item['image'] ?? 'images/default.png') }}"
+                                                    alt="{{ $item['product_name'] }}" class="img-fluid rounded"
+                                                    style="width: 60px; height: auto;">
+                                            </td>
+                                            <td class="text-start">
+                                                <span class="fw-semibold">{{ $item['product_name'] }}</span><br>
+                                                <small class="text-muted">Product ID: {{ $item['product_id'] }}</small>
+                                            </td>
+                                            <td>₱{{ number_format($item['unit_price'], 2) }}</td>
+                                            <td>{{ $item['quantity'] }}</td>
+                                            <td class="fw-bold">₱{{ number_format($item['subtotal'], 2) }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>
