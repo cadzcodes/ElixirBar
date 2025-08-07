@@ -509,7 +509,7 @@
         </a>
         <ul class="sub-nav collapse" id="utilities-error" data-bs-parent="#sidebar">
             <li class="nav-item">
-                <a class="nav-link" href="{{route('errors.error404')}}">
+                <a class="nav-link {{activeRoute(route('orders.order-list'))}}" href="{{route('orders.order-list')}}">
                     <i class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
                             <g>
@@ -517,7 +517,7 @@
                             </g>
                         </svg>
                     </i>
-                    <span class="item-name">Error 404</span>
+                    <span class="item-name">Order List</span>
                 </a>
             </li>
             <li class="nav-item">

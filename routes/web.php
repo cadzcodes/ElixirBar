@@ -8,6 +8,7 @@ use App\Http\Controllers\Security\PermissionController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\ProductTableController;
+use App\Http\Controllers\OrderController;
 // Packages
 use Illuminate\Support\Facades\Route;
 
@@ -134,3 +135,5 @@ Route::get('clients', [UserController::class, 'clientList'])->name('clients.inde
 
 Route::get('/clients/{id}/edit', [UserController::class, 'editClient'])->name('clients.edit');
 Route::patch('/clients/{id}', [UserController::class, 'updateClient'])->name('clients.update');
+
+Route::get('/orders', [OrderController::class, 'index'])->name('orders.order-list');
