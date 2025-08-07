@@ -19,6 +19,8 @@
 
 <link rel="stylesheet" href="{{asset('vendor/aos/dist/aos.css')}}" />
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
 <style>
     th.hide-search input{
        display: none;

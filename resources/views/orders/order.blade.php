@@ -2,11 +2,66 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between">
+                <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-3">
                     <div class="header-title">
-                        <h4 class="card-title">Order #{{$id}}</h4>
+                        <h4 class="card-title mb-1">Order #{{$id}}</h4>
+                        <p class="mb-0 text-muted">
+                            <strong>Customer:</strong> Raymund Joel Cadiz <br>
+                            <strong>Order Date:</strong> Aug 7, 2025
+                        </p>
                     </div>
+                    <div class="w-100 mt-3">
+                        @php
+                            $statusSteps = ['Order Placed', 'To Ship', 'To Receive', 'Completed'];
+                            $currentStatus = 'To Ship'; // Change this dynamically
+                            $currentIndex = array_search($currentStatus, $statusSteps);
+                        @endphp
+
+                        <div class="position-relative px-2 py-4">
+                            <!-- Progress Base Line -->
+                            <div class="position-absolute start-0 w-100" style="top: 40%; transform: translateY(-50%);">
+                                <div class="bg-secondary" style="height: 4px; width: 100%; border-radius: 2px;"></div>
+                                <div class="position-absolute top-0 start-0 h-100 z-1"
+                                    style="width: calc({{ ($currentIndex / (count($statusSteps) - 1)) * 120 }}%);">
+                                    <div class="bg-primary" style="height: 4px; border-radius: 2px;"></div>
+                                </div>
+                            </div>
+
+                            <!-- Steps -->
+                            <div class="d-flex justify-content-between align-items-center position-relative z-2">
+                                @foreach ($statusSteps as $index => $step)
+                                    @php
+                                        $isActive = $index <= $currentIndex;
+                                        $isCurrent = $index === $currentIndex;
+                                    @endphp
+                                    <div class="text-center flex-fill position-relative" style="z-index: 2;">
+                                        <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center"
+                                            style="width: 48px; height: 48px;
+                                                background-color: {{ $isActive ? '#0d6efd' : '#6c757d' }};
+                                                color: white;
+                                                border: 3px solid {{ $isCurrent ? 'white' : ($isActive ? '#0d6efd' : '#6c757d') }};
+                                                box-shadow: 0 0 0 3px {{ $isActive ? '#0d6efd44' : 'transparent' }};">
+                                            @if ($step === 'Order Placed')
+                                                <i class="bi bi-check-circle-fill fs-5"></i>
+                                            @elseif ($step === 'To Ship')
+                                                <i class="bi bi-truck fs-5"></i>
+                                            @elseif ($step === 'To Receive')
+                                                <i class="bi bi-box-seam fs-5"></i>
+                                            @elseif ($step === 'Completed')
+                                                <i class="bi bi-star-fill fs-5"></i>
+                                            @endif
+                                        </div>
+                                        <small class="d-block mt-2"
+                                            style="color: {{ $isActive ? '#0d6efd' : '#adb5bd' }}">{{ $step }}</small>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                    </div>
+
                 </div>
+
                 <div class="card-body p-0">
                     <div class="mt-4">
                     </div>
@@ -102,18 +157,26 @@
                             </div>
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex align-items-center">
-                                    <div class="border rounded p-3 bg-soft-dark me-3">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24"
-                                            fill="currentColor">
-                                            <path d="M4 7h16v2H4V7zm0 4h16v2H4v-2zm0 4h10v2H4v-2z" />
+                                    <div class="border rounded p-3 bg-soft-primary me-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                            viewBox="0 0 192 192" fill="none">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="12"
+                                                d="M84 96h36c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36c9.941 0 18.941 4.03 25.456 10.544" />
+                                            <path fill="currentColor"
+                                                d="M145.315 66.564a6 6 0 0 0-10.815 5.2l10.815-5.2ZM134.5 120.235a6 6 0 0 0 10.815 5.201l-10.815-5.201Zm-16.26-68.552a6 6 0 1 0 7.344-9.49l-7.344 9.49Zm7.344 98.124a6 6 0 0 0-7.344-9.49l7.344 9.49ZM84 152c-30.928 0-56-25.072-56-56H16c0 37.555 30.445 68 68 68v-12ZM28 96c0-30.928 25.072-56 56-56V28c-37.555 0-68 30.445-68 68h12Zm106.5-24.235C138.023 79.09 140 87.306 140 96h12c0-10.532-2.399-20.522-6.685-29.436l-10.815 5.2ZM140 96c0 8.694-1.977 16.909-5.5 24.235l10.815 5.201C149.601 116.522 152 106.532 152 96h-12ZM84 40c12.903 0 24.772 4.357 34.24 11.683l7.344-9.49A67.733 67.733 0 0 0 84 28v12Zm34.24 100.317C108.772 147.643 96.903 152 84 152v12a67.733 67.733 0 0 0 41.584-14.193l-7.344-9.49Z" />
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="12"
+                                                d="M161.549 58.776C166.965 70.04 170 82.666 170 96c0 13.334-3.035 25.96-8.451 37.223" />
                                         </svg>
                                     </div>
                                     <div>
-                                        <h2 class="text-dark">GCash</h2>
+                                        <h2 class="text-primary mb-0">GCash</h2>
                                         <small class="text-muted">Ref: #94828484</small>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -201,6 +264,22 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row g-2">
+                                        <div class="col-6">
+                                            <button class="btn btn-danger w-100">Cancel Order</button>
+                                        </div>
+                                        <div class="col-6">
+                                            <button class="btn btn-primary w-100">Approve Shipping</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="card shadow-sm">
@@ -236,6 +315,8 @@
                 </div>
 
             </div>
+
+
         </div>
     </div>
 
