@@ -15,7 +15,7 @@ class OrderController extends Controller
     }
     public function view($id)
     {
-        $order = \App\Models\Order::with(['items.product', 'address'])->findOrFail($id);
+        $order = \App\Models\Order::with(['items.product', 'address', 'user'])->findOrFail($id);
 
         if (!$order->address) {
             \Log::warning("Order {$id} has no address. Address ID: " . $order->address_id);
@@ -32,6 +32,13 @@ class OrderController extends Controller
             ];
         });
 
+        $statusDate = match ($order->status) {
+            'Delivered' => $order->completed_at,
+            'To Ship' => $order->to_ship_at,
+            'To Receive' => $order->to_receive_at,
+            default => $order->order_date,
+        };
+
         $orderData = [
             'id' => $order->id,
             'status' => $order->status,
@@ -40,6 +47,8 @@ class OrderController extends Controller
             'total' => $order->total,
             'eta' => $order->eta,
             'created_at' => $order->created_at,
+            'status_date' => $statusDate,
+            'customer_name' => $order->user->name ?? 'Unknown Customer',
             'items' => $items,
             'subtotal' => $items->sum('subtotal'),
             'shipping' => $order->address ? [
@@ -58,6 +67,5 @@ class OrderController extends Controller
 
         return view('orders.order', ['orderData' => (object) $orderData]);
     }
-
 
 }

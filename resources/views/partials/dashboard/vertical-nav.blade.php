@@ -520,7 +520,7 @@
                     <span class="item-name">Order List</span>
                 </a>
             </li>
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link" href="{{route('errors.error500')}}">
                     <i class="icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" viewBox="0 0 24 24" fill="currentColor">
@@ -543,10 +543,10 @@
                     </i>
                     <span class="item-name">Maintence</span>
                 </a>
-            </li>
+            </li> --}}
         </ul>
     </li>
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <a class="nav-link {{activeRoute(route('role.permission.list'))}}" href="{{route('role.permission.list')}}"
             target="_blank">
             <i class="icon">
@@ -561,8 +561,8 @@
             </i>
             <span class="item-name">Admin</span>
         </a>
-    </li>
-    <li>
+    </li> --}}
+    {{-- <li>
         <hr class="hr-horizontal">
     </li>
     <li class="nav-item static-item">
@@ -878,5 +878,5 @@
                 </a>
             </li>
         </ul>
-    </li>
+    </li> --}}
 </ul>

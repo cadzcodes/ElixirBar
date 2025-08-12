@@ -15,12 +15,21 @@ class Order extends Model
         'status',
         'order_date',
         'eta',
-    ];
+        'to_ship_at',
+        'to_receive_at',
+        'completed_at',
+        'cancelled_at'
 
+    ];
     protected $casts = [
         'order_date' => 'datetime',
         'eta' => 'datetime',
+        'to_ship_at' => 'datetime',
+        'to_receive_at' => 'datetime',
+        'completed_at' => 'datetime',
+        'cancelled_at' => 'datetime',
     ];
+
 
     public function user()
     {
