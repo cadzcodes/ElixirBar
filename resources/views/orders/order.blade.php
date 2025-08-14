@@ -66,11 +66,11 @@
 
                                     <div class="text-center flex-fill position-relative" style="z-index: 2;">
                                         <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center
-                                                                    {{ $isActive ? 'bg-' . $colorClass : 'bg-secondary' }}"
+                                                                                {{ $isActive ? 'bg-' . $colorClass : 'bg-secondary' }}"
                                             style="width: 48px; height: 48px;
-                                                                    color: white;
-                                                                    border: 3px solid {{ $isCurrent ? 'white' : ($isActive ? ($isCancelled ? '#dc3545' : '#0d6efd') : '#6c757d') }};
-                                                                    box-shadow: 0 0 0 3px {{ $isActive ? ($isCancelled ? '#dc354544' : '#0d6efd44') : 'transparent' }};">
+                                                                                color: white;
+                                                                                border: 3px solid {{ $isCurrent ? 'white' : ($isActive ? ($isCancelled ? '#dc3545' : '#0d6efd') : '#6c757d') }};
+                                                                                box-shadow: 0 0 0 3px {{ $isActive ? ($isCancelled ? '#dc354544' : '#0d6efd44') : 'transparent' }};">
 
                                             @if ($isCancelled && $index === 0)
                                                 <i class="bi bi-x-circle-fill fs-5"></i>
@@ -390,22 +390,26 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <div class="row g-2">
-                                        <div class="col-6">
-                                            <button class="btn btn-danger w-100">Cancel Order</button>
-                                        </div>
-                                        <div class="col-6">
-                                            <button class="btn btn-primary w-100">Approve Shipping</button>
+                    @if(!empty($orderData->actions))
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="row g-2">
+                                            @foreach($orderData->actions as $action)
+                                                <div class="{{ count($orderData->actions) === 1 ? 'col-12' : 'col-6' }}">
+                                                    <a href="{{ $action['action'] }}" class="btn {{ $action['class'] }} w-100">
+                                                        {{ $action['label'] }}
+                                                    </a>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endif
+
                 </div>
                 @if ($orderData->shipping)
                     <div class="col-lg-6">

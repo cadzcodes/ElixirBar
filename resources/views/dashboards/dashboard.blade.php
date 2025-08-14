@@ -201,7 +201,7 @@
                <div class="card" data-aos="fade-up" data-aos-delay="800">
                   <div class="card-header d-flex justify-content-between flex-wrap">
                      <div class="header-title">
-                        <h4 class="card-title">$855.8K</h4>
+                        <h4 class="card-title">₱{{ number_format($subtotal, 2) }}</h4>
                         <p class="mb-0">Gross Sales</p>
                      </div>
                      <div class="d-flex align-items-center align-self-center">
@@ -226,7 +226,7 @@
                            </div>
                         </div>
                      </div>
-                     <div class="dropdown">
+                     {{-- <div class="dropdown">
                         <a href="#" class="text-secondary dropdown-toggle" id="dropdownMenuButton2"
                            data-bs-toggle="dropdown" aria-expanded="false">
                            This Week
@@ -236,7 +236,7 @@
                            <li><a class="dropdown-item" href="#">This Month</a></li>
                            <li><a class="dropdown-item" href="#">This Year</a></li>
                         </ul>
-                     </div>
+                     </div> --}}
                   </div>
                   <div class="card-body">
                      <div id="d-main" class="d-main"></div>
@@ -345,129 +345,56 @@
                         <table id="basic-table" class="table table-striped mb-0" role="grid">
                            <thead>
                               <tr>
-                                 <th>COMPANIES</th>
+                                 <th>CUSTOMER</th>
                                  <th>DATE ORDERED</th>
                                  <th>ORDER</th>
                                  <th>COMPLETION</th>
                               </tr>
                            </thead>
                            <tbody>
-                              <tr>
-                                 <td>
+                              @foreach ($recentOrders as $order)
+                                @php
+                              $statusProgress = match ($order->status) {
+                               'Cancelled' => 0,
+                               'Order Placed' => 20,
+                               'To Ship' => 40,
+                               'To Receive' => 70,
+                               'Completed' => 100,
+                               default => 0,
+                              };
+
+                              $progressColor = match ($order->status) {
+                               'Cancelled' => 'bg-danger',
+                               'Completed' => 'bg-success',
+                               default => 'bg-primary',
+                              };
+                         @endphp
+
+                                <tr>
+                                  <td>
                                     <div class="d-flex align-items-center">
                                        <img class="bg-soft-primary rounded img-fluid avatar-40 me-3"
-                                          src="{{asset('images/shapes/01.png')}}" alt="profile">
-                                       <h6>Addidis Sportwear</h6>
+                                         src="{{ asset('images/shapes/01.png') }}" alt="profile">
+                                       <h6>{{ $order->user->name }}</h6>
                                     </div>
-                                 </td>
-                                 <td>
-                                    July 30, 2025
-                                 </td>
-                                 <td>$14,000</td>
-                                 <td>
+                                  </td>
+                                  <td>{{ $order->order_date->format('F d, Y') }}</td>
+                                  <td>₱{{ number_format($order->total, 2) }}</td>
+                                  <td>
                                     <div class="d-flex align-items-center mb-2">
-                                       <h6>60%</h6>
+                                       <h6>{{ $statusProgress }}%</h6>
                                     </div>
                                     <div class="progress bg-soft-primary shadow-none w-100" style="height: 4px">
-                                       <div class="progress-bar bg-primary" data-toggle="progress-bar"
-                                          role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100">
+                                       <div class="progress-bar {{ $progressColor }}" role="progressbar"
+                                         style="width: {{ $statusProgress }}%" aria-valuenow="{{ $statusProgress }}"
+                                         aria-valuemin="0" aria-valuemax="100">
                                        </div>
                                     </div>
-                                 </td>
-                              </tr>
-                              <tr>
-                                 <td>
-                                    <div class="d-flex align-items-center">
-                                       <img class="bg-soft-primary rounded img-fluid avatar-40 me-3"
-                                          src="{{asset('images/shapes/05.png')}}" alt="profile">
-                                       <h6>Netflixer Platforms</h6>
-                                    </div>
-                                 </td>
-                                 <td>
-                                    July 30, 2025
-                                 </td>
-                                 <td>$30,000</td>
-                                 <td>
-                                    <div class="d-flex align-items-center mb-2">
-                                       <h6>25%</h6>
-                                    </div>
-                                    <div class="progress bg-soft-primary shadow-none w-100" style="height: 4px">
-                                       <div class="progress-bar bg-primary" data-toggle="progress-bar"
-                                          role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
-                              <tr>
-                                 <td>
-                                    <div class="d-flex align-items-center">
-                                       <img class="bg-soft-primary rounded img-fluid avatar-40 me-3"
-                                          src="{{asset('images/shapes/02.png')}}" alt="profile">
-                                       <h6>Shopifi Stores</h6>
-                                    </div>
-                                 </td>
-                                 <td>
-                                    July 30, 2025
-                                 </td>
-                                 <td>$8,500</td>
-                                 <td>
-                                    <div class="d-flex align-items-center mb-2">
-                                       <h6>100%</h6>
-                                    </div>
-                                    <div class="progress bg-soft-success shadow-none w-100" style="height: 4px">
-                                       <div class="progress-bar bg-success" data-toggle="progress-bar"
-                                          role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
-                              <tr>
-                                 <td>
-                                    <div class="d-flex align-items-center">
-                                       <img class="bg-soft-primary rounded img-fluid avatar-40 me-3"
-                                          src="{{asset('images/shapes/03.png')}}" alt="profile">
-                                       <h6>Bootstrap Technologies</h6>
-                                    </div>
-                                 </td>
-                                 <td>
-                                    July 30, 2025
-                                 </td>
-                                 <td>$20,500</td>
-                                 <td>
-                                    <div class="d-flex align-items-center mb-2">
-                                       <h6>100%</h6>
-                                    </div>
-                                    <div class="progress bg-soft-success shadow-none w-100" style="height: 4px">
-                                       <div class="progress-bar bg-success" data-toggle="progress-bar"
-                                          role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
-                              <tr>
-                                 <td>
-                                    <div class="d-flex align-items-center">
-                                       <img class="bg-soft-primary rounded img-fluid avatar-40 me-3"
-                                          src="{{asset('images/shapes/04.png')}}" alt="profile">
-                                       <h6>Community First</h6>
-                                    </div>
-                                 </td>
-                                 <td>
-                                    July 30, 2025
-                                 </td>
-                                 <td>$9,800</td>
-                                 <td>
-                                    <div class="d-flex align-items-center mb-2">
-                                       <h6>100%</h6>
-                                    </div>
-                                    <div class="progress bg-soft-success shadow-none w-100" style="height: 4px">
-                                       <div class="progress-bar bg-success" data-toggle="progress-bar"
-                                          role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
-                                       </div>
-                                    </div>
-                                 </td>
-                              </tr>
+                                  </td>
+                                </tr>
+                       @endforeach
                            </tbody>
+
                         </table>
                      </div>
                   </div>

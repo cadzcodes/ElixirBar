@@ -34,7 +34,6 @@ class HomeController extends Controller
             ->orderBy(DB::raw("MIN(order_date)"))
             ->get();
 
-        // Ensure months are in order (Jan, Feb, etc.)
         $months = [];
         $monthlySales = [];
         $monthlyCosts = [];
@@ -44,6 +43,12 @@ class HomeController extends Controller
             $monthlySales[] = (float) $row->total;
             $monthlyCosts[] = round($row->total * 0.20, 2);
         }
+
+        // ✅ Fetch last 5 recent orders with user name
+        $recentOrders = Order::with('user')
+            ->latest('order_date')
+            ->take(5)
+            ->get();
 
         return view('dashboards.dashboard', compact(
             'assets',
@@ -55,9 +60,11 @@ class HomeController extends Controller
             'profit',
             'months',
             'monthlySales',
-            'monthlyCosts'
+            'monthlyCosts',
+            'recentOrders' // pass to view
         ));
     }
+
 
 
     /*

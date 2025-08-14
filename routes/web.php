@@ -139,3 +139,9 @@ Route::patch('/clients/{id}', [UserController::class, 'updateClient'])->name('cl
 Route::get('/orders', [OrderController::class, 'index'])->name('orders.order-list');
 
 Route::get('/admin/orders/{order}/view', [OrderController::class, 'view'])->name('orders.order');
+
+
+Route::get('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+Route::get('/orders/{id}/approve-shipping', [OrderController::class, 'approveShipping'])->name('orders.approveShipping');
+Route::get('/orders/{id}/process-delivery', [OrderController::class, 'processDelivery'])->name('orders.processDelivery');
+Route::get('/orders/{id}/complete', [OrderController::class, 'complete'])->name('orders.complete');
