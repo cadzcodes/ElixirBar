@@ -39,7 +39,7 @@ class ProductTableController extends Controller
             'sale_price' => 'nullable|numeric',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'availability' => 'required|in:in-stock,out-of-stock',
+            'stocks' => 'required|integer|min:0', // 👈 replace availability with stocks
             'tags' => 'nullable|string',
         ]);
 
@@ -92,6 +92,7 @@ class ProductTableController extends Controller
 
 
 
+
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
@@ -99,7 +100,7 @@ class ProductTableController extends Controller
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
             'description' => 'required|string',
-            'availability' => 'required|in:in-stock,out-of-stock',
+            'stocks' => 'required|integer|min:0', // 👈 replace availability
             'tags' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
@@ -159,7 +160,6 @@ class ProductTableController extends Controller
 
         return redirect()->route('admin.products')->with('success', 'Product updated successfully.');
     }
-
 
 
     public function destroy($id)

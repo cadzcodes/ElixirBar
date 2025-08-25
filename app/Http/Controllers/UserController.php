@@ -48,19 +48,20 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $request['password'] = bcrypt($request->password);
-
         $request['username'] = $request->username ?? stristr($request->email, "@", true) . rand(100, 1000);
+
+        $request['name'] = trim($request->first_name . ' ' . $request->last_name);
 
         $user = User::create($request->all());
 
         storeMediaFile($user, $request->profile_image, 'profile_image');
 
-        $user->assignRole('user');
+        if ($request->has('userProfile')) {
+            $user->userProfile()->create($request->userProfile);
+        }
 
-        // Save user Profile data...
-        $user->userProfile()->create($request->userProfile);
-
-        return redirect()->route('users.index')->withSuccess(__('message.msg_added', ['name' => __('users.store')]));
+        return redirect()->route('users.index')
+            ->withSuccess(__('message.msg_added', ['name' => __('users.store')]));
     }
 
     /**
@@ -106,36 +107,29 @@ class UserController extends Controller
      */
     public function update(UserRequest $request, $id)
     {
-        // dd($request->all());
         $user = User::with('userProfile')->findOrFail($id);
 
-        $role = Role::find($request->user_role);
-        if (env('IS_DEMO')) {
-            if ($role->name === 'admin' && $user->user_type === 'admin') {
-                return redirect()->back()->with('error', 'Permission denied');
-            }
-        }
-        $user->assignRole($role->name);
+        // Handle password
+        $request['password'] = $request->filled('password')
+            ? bcrypt($request->password)
+            : $user->password;
 
-        $request['password'] = $request->password != '' ? bcrypt($request->password) : $user->password;
-
-        // User user data...
+        // Update user (now includes user_type instead of role)
         $user->fill($request->all())->update();
 
-        // Save user image...
-        if (isset($request->profile_image) && $request->profile_image != null) {
+        // Save user image
+        if ($request->hasFile('profile_image')) {
             $user->clearMediaCollection('profile_image');
             $user->addMediaFromRequest('profile_image')->toMediaCollection('profile_image');
         }
 
-        // user profile data....
-        $user->userProfile->fill($request->userProfile)->update();
-
-        if (auth()->check()) {
-            return redirect()->route('users.index')->withSuccess(__('message.msg_updated', ['name' => __('message.user')]));
+        // Update or create user profile
+        if ($request->has('userProfile') && is_array($request->userProfile)) {
+            $user->userProfile()->updateOrCreate([], $request->userProfile);
         }
-        return redirect()->back()->withSuccess(__('message.msg_updated', ['name' => 'My Profile']));
 
+        return redirect()->route('users.index')
+            ->withSuccess(__('message.msg_updated', ['name' => __('message.user')]));
     }
 
     /**

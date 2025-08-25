@@ -524,7 +524,7 @@
                            <div class="profile-dots-pills border-primary mt-1"></div>
                            <div class="ms-4">
                               <h6 class="mb-1">
-                                 Order #{{ $order->id }} - ${{ number_format($order->total, 2) }}
+                                 Order #{{ $order->id }} - ₱{{ number_format($order->total, 2) }}
                               </h6>
                               <span class="mb-0">
                                  {{ $order->user ? $order->user->name : 'Guest' }} ·
