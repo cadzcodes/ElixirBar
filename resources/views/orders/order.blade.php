@@ -54,7 +54,7 @@
                                 @foreach ($statusSteps as $index => $step)
                                     @php
                                         if ($isCancelled) {
-                                            $isActive = $index === 0; // Only first step active
+                                            $isActive = $index === 0; // Only first step active 
                                             $isCurrent = $index === 0;
                                             $colorClass = 'danger';
                                         } else {
@@ -66,11 +66,11 @@
 
                                     <div class="text-center flex-fill position-relative" style="z-index: 2;">
                                         <div class="rounded-circle mx-auto d-flex align-items-center justify-content-center
-                                                                                {{ $isActive ? 'bg-' . $colorClass : 'bg-secondary' }}"
+                                                                                                                                                            {{ $isActive ? 'bg-' . $colorClass : 'bg-secondary' }}"
                                             style="width: 48px; height: 48px;
-                                                                                color: white;
-                                                                                border: 3px solid {{ $isCurrent ? 'white' : ($isActive ? ($isCancelled ? '#dc3545' : '#0d6efd') : '#6c757d') }};
-                                                                                box-shadow: 0 0 0 3px {{ $isActive ? ($isCancelled ? '#dc354544' : '#0d6efd44') : 'transparent' }};">
+                                                                                                                                                            color: white;
+                                                                                                                                                            border: 3px solid {{ $isCurrent ? 'white' : ($isActive ? ($isCancelled ? '#dc3545' : '#0d6efd') : '#6c757d') }};
+                                                                                                                                                            box-shadow: 0 0 0 3px {{ $isActive ? ($isCancelled ? '#dc354544' : '#0d6efd44') : 'transparent' }};">
 
                                             @if ($isCancelled && $index === 0)
                                                 <i class="bi bi-x-circle-fill fs-5"></i>
@@ -116,18 +116,25 @@
                                     <span class="badge bg-primary">GCash</span>
                                 </div>
                             </div>
+                            @php
+                                $isPending = strtolower($orderData->status) === 'pending';
+                                $amountPaid = $isPending ? 0 : 100;
+                            @endphp
+
                             <div class="d-flex justify-content-between mt-2">
                                 <div>
                                     <span>Amount Paid</span>
                                 </div>
                                 <div>
-                                    <span>35%</span>
+                                    <span>{{ $amountPaid }}%</span>
                                 </div>
                             </div>
+
                             <div class="mt-3">
                                 <div class="progress bg-soft-primary shadow-none w-100" style="height: 6px">
-                                    <div class="progress-bar bg-primary" data-toggle="progress-bar" role="progressbar"
-                                        aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-primary" role="progressbar"
+                                        style="width: {{ $amountPaid }}%" aria-valuenow="{{ $amountPaid }}"
+                                        aria-valuemin="0" aria-valuemax="100">
                                     </div>
                                 </div>
                             </div>
@@ -143,6 +150,8 @@
                                     <span>Order Status</span>
                                 </div>
                                 <div>
+
+
                                     @if($orderData->status === 'Delivered')
                                         <!-- Check Icon -->
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
@@ -167,6 +176,9 @@
                                             <path d="M6 12.3281L9 14" stroke="currentColor" stroke-width="2"
                                                 stroke-linecap="round" stroke-linejoin="round" />
                                         </svg>
+
+                                    @elseif($orderData->status === 'pending')
+
                                     @elseif($orderData->status === 'To Receive')
                                         <!-- Placeholder for To Receive Icon -->
                                         <div style="width:20px; height:20px; background:#ccc;"></div>
@@ -194,6 +206,21 @@
                                                     d="M17 13.0001H21V19.0001C21 20.1047 20.1046 21.0001 19 21.0001M17 13.0001V19.0001C17 20.1047 17.8954 21.0001 19 21.0001M17 13.0001V5.75719C17 4.8518 17 4.3991 16.8098 4.13658C16.6439 3.90758 16.3888 3.75953 16.1076 3.72909C15.7853 3.6942 15.3923 3.9188 14.6062 4.368L14.2938 4.54649C14.0045 4.71183 13.8598 4.7945 13.7062 4.82687C13.5702 4.85551 13.4298 4.85551 13.2938 4.82687C13.1402 4.7945 12.9955 4.71183 12.7062 4.54649L10.7938 3.45372C10.5045 3.28838 10.3598 3.20571 10.2062 3.17334C10.0702 3.14469 9.92978 3.14469 9.79383 3.17334C9.64019 3.20571 9.49552 3.28838 9.20618 3.45372L7.29382 4.54649C7.00448 4.71183 6.85981 4.7945 6.70617 4.82687C6.57022 4.85551 6.42978 4.85551 6.29383 4.82687C6.14019 4.7945 5.99552 4.71183 5.70618 4.54649L5.39382 4.368C4.60772 3.9188 4.21467 3.6942 3.89237 3.72909C3.61123 3.75953 3.35611 3.90758 3.1902 4.13658C3 4.3991 3 4.8518 3 5.75719V16.2001C3 17.8803 3 18.7203 3.32698 19.3621C3.6146 19.9266 4.07354 20.3855 4.63803 20.6731C5.27976 21.0001 6.11984 21.0001 7.8 21.0001H19M7 13.0001H9M7 9.0001H13M7 17.0001H9M13 17.0001H13.01M13 13.0001H13.01"
                                                     stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                                     stroke-linejoin="round" />
+                                            </svg>
+
+
+                                        @elseif($orderData->status === 'pending')
+
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                                viewBox="0 0 1024 1024" class="icon" version="1.1">
+                                                <path
+                                                    d="M182.99 146.2h585.14v402.29h73.14V73.06H109.84v877.71H512v-73.14H182.99z"
+                                                    fill="currentColor" />
+                                                <path
+                                                    d="M256.13 219.34h438.86v73.14H256.13zM256.13 365.63h365.71v73.14H256.13zM256.13 511.91h219.43v73.14H256.13zM731.55 585.06c-100.99 0-182.86 81.87-182.86 182.86s81.87 182.86 182.86 182.86c100.99 0 182.86-81.87 182.86-182.86s-81.86-182.86-182.86-182.86z m0 292.57c-60.5 0-109.71-49.22-109.71-109.71 0-60.5 49.22-109.71 109.71-109.71 60.5 0 109.71 49.22 109.71 109.71 0.01 60.49-49.21 109.71-109.71 109.71z"
+                                                    fill="currentColor" />
+                                                <path d="M758.99 692.08h-54.86v87.27l69.39 68.76 38.61-38.96-53.14-52.66z"
+                                                    fill="currentColor" />
                                             </svg>
                                         @elseif($orderData->status === 'To Ship')
                                             <!-- Same Shipping Box Icon, bigger -->
@@ -230,7 +257,13 @@
                                     </div>
                                     <div>
                                         <h2 class="text-info">
-                                            {{ $orderData->status === 'Order Placed' ? 'Placed' : $orderData->status }}
+                                            {{
+    $orderData->status === 'Order Placed'
+    ? 'Placed'
+    : ($orderData->status === 'pending'
+        ? 'Payment'
+        : $orderData->status)
+    }}
                                         </h2>
                                         <small
                                             class="text-muted">{{ $orderData->status_date ? $orderData->status_date->format('M j, Y') : '' }}</small>
@@ -260,34 +293,24 @@
                             </div>
                             <div class="d-flex justify-content-between">
                                 <div class="d-flex align-items-center">
-                                    <div class="border rounded p-3 bg-soft-primary me-3">
+                                    <div class="border rounded p-1 bg-soft-primary me-3">
 
-                                        @if($orderData->payment_method === 'GCash')
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                                                    viewBox="0 0 192 192" fill="none">
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="12"
-                                                        d="M84 96h36c0 19.882-16.118 36-36 36s-36-16.118-36-36 16.118-36 36-36c9.941 0 18.941 4.03 25.456 10.544" />
-                                                    <path fill="currentColor"
-                                                        d="M145.315 66.564a6 6 0 0 0-10.815 5.2l10.815-5.2ZM134.5 120.235a6 6 0 0 0 10.815 5.201l-10.815-5.201Zm-16.26-68.552a6 6 0 1 0 7.344-9.49l-7.344 9.49Zm7.344 98.124a6 6 0 0 0-7.344-9.49l7.344 9.49ZM84 152c-30.928 0-56-25.072-56-56H16c0 37.555 30.445 68 68 68v-12ZM28 96c0-30.928 25.072-56 56-56V28c-37.555 0-68 30.445-68 68h12Zm106.5-24.235C138.023 79.09 140 87.306 140 96h12c0-10.532-2.399-20.522-6.685-29.436l-10.815 5.2ZM140 96c0 8.694-1.977 16.909-5.5 24.235l10.815 5.201C149.601 116.522 152 106.532 152 96h-12ZM84 40c12.903 0 24.772 4.357 34.24 11.683l7.344-9.49A67.733 67.733 0 0 0 84 28v12Zm34.24 100.317C108.772 147.643 96.903 152 84 152v12a67.733 67.733 0 0 0 41.584-14.193l-7.344-9.49Z" />
-                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                        stroke-width="12"
-                                                        d="M161.549 58.776C166.965 70.04 170 82.666 170 96c0 13.334-3.035 25.96-8.451 37.223" />
-                                                </svg>
+                                        @if($orderData->payment_method === 'gcash')
+                                                <img src="{{ asset('images/gcash.png') }}" alt="GCash" width="50" height="50">
                                             </div>
                                             <div>
                                                 <h2 class="text-primary mb-0">GCash</h2>
-                                        @elseif($orderData->payment_method === 'Credit Card')
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                                                    viewBox="0 0 24 24" fill="none">
-                                                    <path
-                                                        d="M6 15H8M3 11H21M3 8H21M12 15H16M6.2 19H17.8C18.9201 19 19.4802 19 19.908 18.782C20.2843 18.5903 20.5903 18.2843 20.782 17.908C21 17.4802 21 16.9201 21 15.8V8.2C21 7.0799 21 6.51984 20.782 6.09202C20.5903 5.71569 20.2843 5.40973 19.908 5.21799C19.4802 5 18.9201 5 17.8 5H6.2C5.0799 5 4.51984 5 4.09202 5.21799C3.71569 5.40973 3.40973 5.71569 3.21799 6.09202C3 6.51984 3 7.07989 3 8.2V15.8C3 16.9201 3 17.4802 3.21799 17.908C3.40973 18.2843 3.71569 18.5903 4.09202 18.782C4.51984 19 5.07989 19 6.2 19Z"
-                                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                                        stroke-linejoin="round" />
-                                                </svg>
+                                        @elseif($orderData->payment_method === 'paymaya')
+                                                <img src="{{ asset('images/maya.png') }}" alt="Maya" width="50" height="50">
                                             </div>
                                             <div>
-                                                <h2 class="text-primary mb-0">Credit Card</h2>
+                                                <h2 class="text-primary mb-0">Maya</h2>
+
+                                        @elseif($orderData->payment_method === 'paypal')
+                                                <img src="{{ asset('images/paypal.png') }}" alt="Paypal" width="50" height="50">
+                                            </div>
+                                            <div>
+                                                <h2 class="text-primary mb-0">PayPal</h2>
                                         @elseif($orderData->payment_method === 'Cash on Delivery')
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="32"
                                                     height="32" viewBox="0 0 30 30">
@@ -390,7 +413,15 @@
                             </div>
                         </div>
                     </div>
-                    @if(!empty($orderData->actions))
+                    @if(strtolower($orderData->status) === 'completed')
+                        <div class="alert alert-success text-center">
+                            ✅ This order has been <strong>completed</strong>.
+                        </div>
+                    @elseif(strtolower($orderData->status) === 'cancelled')
+                        <div class="alert alert-danger text-center">
+                            ❌ This order has been <strong>cancelled</strong>.
+                        </div>
+                    @elseif(!empty($orderData->actions))
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="card">
@@ -409,6 +440,7 @@
                             </div>
                         </div>
                     @endif
+
 
                 </div>
                 @if ($orderData->shipping)
