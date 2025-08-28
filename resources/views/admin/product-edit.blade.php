@@ -140,18 +140,17 @@
 
                             {{-- Availability Status (optional for UI) --}}
                             <div class="form-group mt-3">
-                                <label class="form-label">Availability</label>
-                                <div class="d-flex gap-4">
-                                    <div class="form-check">
-                                        {{ Form::radio('availability', 'in-stock', $product->availability === 'in-stock' ?? true, ['class' => 'form-check-input', 'id' => 'in-stock']) }}
-                                        <label class="form-check-label" for="in-stock">In Stock</label>
-                                    </div>
-                                    <div class="form-check">
-                                        {{ Form::radio('availability', 'out-of-stock', $product->availability === 'out-of-stock', ['class' => 'form-check-input', 'id' => 'out-stock']) }}
-                                        <label class="form-check-label" for="out-stock">Out of Stock</label>
-                                    </div>
+                                <label class="form-label">Quantity</label>
+                                <div class="d-flex align-items-center">
+                                    {{ Form::number('stocks', $product->stocks ?? 0, [
+    'class' => 'form-control',
+    'min' => 0,
+    'id' => 'stocks',
+    'placeholder' => 'Enter quantity'
+]) }}
                                 </div>
                             </div>
+
 
                             {{-- Submit --}}
                             <div class="mt-4 d-flex gap-2">

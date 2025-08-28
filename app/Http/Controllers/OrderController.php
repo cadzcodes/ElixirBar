@@ -45,14 +45,20 @@ class OrderController extends Controller
                 ['label' => 'Cancel Order', 'class' => 'btn-danger', 'action' => route('orders.cancel', $order->id)],
                 ['label' => 'Approve Shipping', 'class' => 'btn-primary', 'action' => route('orders.approveShipping', $order->id)],
             ],
+            'pending' => [
+                ['label' => 'Cancel Order', 'class' => 'btn-danger', 'action' => route('orders.cancel', $order->id)],
+                ['label' => 'Approve COD', 'class' => 'btn-primary', 'action' => route('orders.approveShipping', $order->id)],
+            ],
             'To Ship' => [
                 ['label' => 'Process Delivery', 'class' => 'btn-primary', 'action' => route('orders.processDelivery', $order->id)],
             ],
             'To Receive' => [
                 ['label' => 'Complete Order', 'class' => 'btn-success', 'action' => route('orders.complete', $order->id)],
             ],
+            'Completed' => 'completed',
             default => [],
         };
+
 
         $orderData = [
             'id' => $order->id,

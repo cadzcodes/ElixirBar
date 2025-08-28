@@ -353,46 +353,46 @@
                            </thead>
                            <tbody>
                               @foreach ($recentOrders as $order)
-                                @php
-                              $statusProgress = match ($order->status) {
-                               'Cancelled' => 0,
-                               'Order Placed' => 20,
-                               'To Ship' => 40,
-                               'To Receive' => 70,
-                               'Completed' => 100,
-                               default => 0,
-                              };
+                                 @php
+                                    $statusProgress = match ($order->status) {
+                                       'Cancelled' => 0,
+                                       'Order Placed' => 20,
+                                       'To Ship' => 40,
+                                       'To Receive' => 70,
+                                       'Completed' => 100,
+                                       default => 0,
+                                    };
 
-                              $progressColor = match ($order->status) {
-                               'Cancelled' => 'bg-danger',
-                               'Completed' => 'bg-success',
-                               default => 'bg-primary',
-                              };
-                         @endphp
+                                    $progressColor = match ($order->status) {
+                                       'Cancelled' => 'bg-danger',
+                                       'Completed' => 'bg-success',
+                                       default => 'bg-primary',
+                                    };
+                                  @endphp
 
-                                <tr>
-                                  <td>
-                                    <div class="d-flex align-items-center">
-                                       <img class="bg-soft-primary rounded img-fluid avatar-40 me-3"
-                                         src="{{ asset('images/shapes/01.png') }}" alt="profile">
-                                       <h6>{{ $order->user->name }}</h6>
-                                    </div>
-                                  </td>
-                                  <td>{{ $order->order_date->format('F d, Y') }}</td>
-                                  <td>₱{{ number_format($order->total, 2) }}</td>
-                                  <td>
-                                    <div class="d-flex align-items-center mb-2">
-                                       <h6>{{ $statusProgress }}%</h6>
-                                    </div>
-                                    <div class="progress bg-soft-primary shadow-none w-100" style="height: 4px">
-                                       <div class="progress-bar {{ $progressColor }}" role="progressbar"
-                                         style="width: {{ $statusProgress }}%" aria-valuenow="{{ $statusProgress }}"
-                                         aria-valuemin="0" aria-valuemax="100">
+                                 <tr>
+                                    <td>
+                                       <div class="d-flex align-items-center">
+                                          <img class="bg-soft-primary rounded img-fluid avatar-40 me-3"
+                                             src="{{ asset('images/shapes/01.png') }}" alt="profile">
+                                          <h6>{{ $order->user->name }}</h6>
                                        </div>
-                                    </div>
-                                  </td>
-                                </tr>
-                       @endforeach
+                                    </td>
+                                    <td>{{ $order->order_date->format('F d, Y') }}</td>
+                                    <td>₱{{ number_format($order->total, 2) }}</td>
+                                    <td>
+                                       <div class="d-flex align-items-center mb-2">
+                                          <h6>{{ $statusProgress }}%</h6>
+                                       </div>
+                                       <div class="progress bg-soft-primary shadow-none w-100" style="height: 4px">
+                                          <div class="progress-bar {{ $progressColor }}" role="progressbar"
+                                             style="width: {{ $statusProgress }}%" aria-valuenow="{{ $statusProgress }}"
+                                             aria-valuemin="0" aria-valuemax="100">
+                                          </div>
+                                       </div>
+                                    </td>
+                                 </tr>
+                              @endforeach
                            </tbody>
 
                         </table>
@@ -514,49 +514,31 @@
                               <path fill="#17904b"
                                  d="M13,20H11V8L5.5,13.5L4.08,12.08L12,4.16L19.92,12.08L18.5,13.5L13,8V20Z" />
                            </svg>
-                           16% this month
+                           {{ $orderCount }} total orders
                         </p>
                      </div>
                   </div>
                   <div class="card-body">
-                     <div class=" d-flex profile-media align-items-top mb-2">
-                        <div class="profile-dots-pills border-primary mt-1"></div>
-                        <div class="ms-4">
-                           <h6 class=" mb-1">$2400, Purchase</h6>
-                           <span class="mb-0">11 JUL 8:10 PM</span>
+                     @forelse($recentOrders as $order)
+                        <div class="d-flex profile-media align-items-top mb-2">
+                           <div class="profile-dots-pills border-primary mt-1"></div>
+                           <div class="ms-4">
+                              <h6 class="mb-1">
+                                 Order #{{ $order->id }} - ₱{{ number_format($order->total, 2) }}
+                              </h6>
+                              <span class="mb-0">
+                                 {{ $order->user ? $order->user->name : 'Guest' }} ·
+                                 {{ \Carbon\Carbon::parse($order->order_date)->format('d M Y h:i A') }}
+                              </span>
+                           </div>
                         </div>
-                     </div>
-                     <div class=" d-flex profile-media align-items-top mb-2">
-                        <div class="profile-dots-pills border-primary mt-1"></div>
-                        <div class="ms-4">
-                           <h6 class=" mb-1">New order #8744152</h6>
-                           <span class="mb-0">11 JUL 11 PM</span>
-                        </div>
-                     </div>
-                     <div class=" d-flex profile-media align-items-top mb-2">
-                        <div class="profile-dots-pills border-primary mt-1"></div>
-                        <div class="ms-4">
-                           <h6 class=" mb-1">Affiliate Payout</h6>
-                           <span class="mb-0">11 JUL 7:64 PM</span>
-                        </div>
-                     </div>
-                     <div class=" d-flex profile-media align-items-top mb-2">
-                        <div class="profile-dots-pills border-primary mt-1"></div>
-                        <div class="ms-4">
-                           <h6 class=" mb-1">New user added</h6>
-                           <span class="mb-0">11 JUL 1:21 AM</span>
-                        </div>
-                     </div>
-                     <div class=" d-flex profile-media align-items-top mb-1">
-                        <div class="profile-dots-pills border-primary mt-1"></div>
-                        <div class="ms-4">
-                           <h6 class=" mb-1">Product added</h6>
-                           <span class="mb-0">11 JUL 4:50 AM</span>
-                        </div>
-                     </div>
+                     @empty
+                        <p class="text-muted">No recent orders available.</p>
+                     @endforelse
                   </div>
                </div>
             </div>
+
          </div>
       </div>
    </div>
