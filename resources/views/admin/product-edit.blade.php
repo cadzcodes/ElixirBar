@@ -133,7 +133,8 @@
                                 <label class="form-label">Tags</label>
                                 <input type="text" name="tags" class="form-control"
                                     placeholder="Comma-separated (e.g. mint, refreshing, mojito)"
-                                    value="{{ old('tags', is_array(json_decode($product->tags)) ? implode(', ', json_decode($product->tags)) : $product->tags ?? '') }}">
+                                    value="{{ old('tags', $product->tags ? implode(', ', $product->tags) : '') }}">
+
                             </div>
 
 
