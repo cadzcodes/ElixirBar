@@ -1257,9 +1257,9 @@
 }
 @media (max-width: 1199.98px) {
   [dir=rtl] .sidebar-default.sidebar-mini.sidebar-boxed + .main-content,
-[dir=rtl] .sidebar-default.sidebar-boxed + .main-content,
-[dir=rtl] .sidebar-default.sidebar-mini + .main-content,
-[dir=rtl] .sidebar-default + .main-content {
+  [dir=rtl] .sidebar-default.sidebar-boxed + .main-content,
+  [dir=rtl] .sidebar-default.sidebar-mini + .main-content,
+  [dir=rtl] .sidebar-default + .main-content {
     margin-right: 0;
     margin-left: unset;
   }

@@ -39,20 +39,21 @@ class ProductTableController extends Controller
             'sale_price' => 'nullable|numeric',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'stocks' => 'required|integer|min:0', // 👈 replace availability with stocks
+            'stocks' => 'required|integer|min:0',
             'tags' => 'nullable|string',
         ]);
-
-        // Handle tags
-        $tagsArray = $request->filled('tags')
-            ? array_map('trim', explode(',', $request->tags))
-            : [];
 
         // Auto-generate slug
         $slug = \Str::slug($validated['name']);
 
-        $product = new Product($validated);
+        $product = new Product();
+        $product->fill($validated);
         $product->slug = $slug;
+
+        // Handle tags (same as update ✅)
+        $tagsArray = $request->filled('tags')
+            ? array_map('trim', explode(',', $request->tags))
+            : [];
         $product->tags = count($tagsArray) > 0 ? $tagsArray : null;
 
         // Handle image upload
@@ -80,7 +81,7 @@ class ProductTableController extends Controller
             }
         }
 
-        // Handle image removal (just in case)
+        // Handle image removal (edge case)
         if ($request->has('remove_image') && $request->remove_image == "1") {
             $product->image = null;
         }
@@ -89,6 +90,7 @@ class ProductTableController extends Controller
 
         return redirect()->route('admin.products')->with('success', 'Product added successfully.');
     }
+
 
 
 

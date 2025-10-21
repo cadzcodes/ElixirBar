@@ -12,9 +12,13 @@ class Product extends Model
         'description',
         'price',
         'sale_price',
-        'image',
+        'stocks',
         'tags',
-        'stocks'
+        'image',
+    ];
+
+    protected $casts = [
+        'tags' => 'array',
     ];
 
     // Automatically generate slug from name
